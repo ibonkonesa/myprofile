@@ -1,36 +1,13 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
-jobs:
-  test:
-    docker:
-      - image: circleci/php:7.3-cli
-        environment:
-          APP_ENV: test
-          DATABASE_URL: ''
-          BUCKET_DNS: ''
-          BUCKET_NAME: ''
-          CDN_DNS: ''
-          APP_SECRET: f7959631cf78a0283382a84670d55b53
-          SENTRY_DSN: ''
-          TRANSLOADIT_KEY: ''
-          TRANSLOADIT_SECRET: ''
-          TRANSLOADIT_TEMPLATE_ID_CURRICULUM: ''
-          TRANSLOADIT_TEMPLATE_ID_IMAGE_PROFILE: ''
-          TRANSLOADIT_TEMPLATE_ID_IMAGE_BACKGROUND: ''
-          TRANSLOADIT_CREDENTIALS: ''
-          TRANSLOADIT_DELIVERY: 0
-    steps:
-      - checkout
-      - run: pwd
-      - run: ls -l
-      - run: php -m
-      - run: sudo composer self-update
-      - run: composer install --prefer-dist --no-ansi --no-interaction --no-progress --optimize-autoloader
-      - run: bin/phpunit
-
-
+# Use a package of configuration called an orb.
+orbs:
+  # Declare a dependency on the welcome-orb
+  welcome: circleci/welcome-orb@0.4.1
+# Orchestrate or schedule a set of jobs
 workflows:
-  version: 2.1
-  test-and-deploy:
+  # Name the workflow "welcome"
+  welcome:
+    # Run the welcome/run job in its own container
     jobs:
-      - test
+      - welcome/run
